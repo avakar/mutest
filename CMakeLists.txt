@@ -27,6 +27,11 @@ add_library(avakar.mutest
 	)
 target_include_directories(avakar.mutest PUBLIC include)
 target_compile_features(avakar.mutest PUBLIC cxx_std_11)
+if (MSVC)
+	target_compile_options(avakar.mutest PUBLIC /W4)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+	target_compile_options(avakar.mutest PUBLIC -Wall)
+endif()
 
 add_library(avakar::mutest ALIAS avakar.mutest)
 

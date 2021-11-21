@@ -11,7 +11,7 @@ namespace mutest {
 
 _test_registrar * _test_registry = nullptr;
 
-int run(int argc, char const * const * argv)
+int run(int, char const * const *)
 {
 	size_t pre_context = 4;
 	size_t post_context = 2;
@@ -43,7 +43,7 @@ int run(int argc, char const * const * argv)
 			}
 
 			size_t w = 0;
-			for (int i = lineno; i > 0; i /= 10)
+			for (size_t i = lineno; i > 0; i /= 10)
 				++w;
 
 			std::cout << e.file() << "(" << target_lineno << "): error MT0: " << cur->name << "\n";
@@ -61,9 +61,9 @@ int run(int argc, char const * const * argv)
 			if (ring_pos >= line_ring.size())
 				ring_pos -= line_ring.size();
 
-			for (int i = first_context_line; i != lineno; ++i)
+			for (size_t i = first_context_line; i != lineno; ++i)
 			{
-				char const * marker = i == e.line()? " >": "  ";
+				char const * marker = i == target_lineno? " >": "  ";
 				auto const & line = line_ring[ring_pos];
 
 				if (line.empty())
@@ -91,6 +91,7 @@ int run(int argc, char const * const * argv)
 		}
 		catch (std::exception const & e)
 		{
+			std::cout << "error: " << cur->name << ": " << e.what() << "\n";
 			return 3;
 		}
 		catch (...)
